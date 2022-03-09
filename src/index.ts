@@ -102,35 +102,35 @@ export interface FaviconStreamOptions extends FaviconOptions {
 export type HandleHTML = (html: FaviconHtmlElement[]) => void;
 
 class FaviconStream extends Transform {
-  #options: FaviconStreamOptions;
-  #handleHTML: HandleHTML;
+  readonly options: FaviconStreamOptions;
+  readonly handleHTML: HandleHTML;
 
   constructor(options: FaviconStreamOptions, handleHTML: HandleHTML) {
     super({ objectMode: true });
-    this.#options = options;
-    this.#handleHTML = handleHTML;
+    this.options = options;
+    this.handleHTML = handleHTML;
   }
 
   _transform(file, _encoding, callback) {
-    const { html: htmlPath, pipeHTML, ...options } = this.#options;
+    const { html: htmlPath, pipeHTML, ...options } = this.options;
 
     favicons(file, options)
       .then(({ images, files, html }) => {
         for (const { name, contents } of [...images, ...files]) {
           this.push({
             name,
-            contents: this.#convertContent(contents),
+            contents: this.convertContent(contents),
           });
         }
 
-        if (this.#handleHTML) {
-          this.#handleHTML(html);
+        if (this.handleHTML) {
+          this.handleHTML(html);
         }
 
         if (pipeHTML) {
           this.push({
             name: htmlPath,
-            contents: this.#convertContent(html.join("\n")),
+            contents: this.convertContent(html.join("\n")),
           });
         }
 
@@ -139,8 +139,8 @@ class FaviconStream extends Transform {
       .catch(callback);
   }
 
-  #convertContent(contents: string | Buffer): string | Buffer {
-    return (this.#options.emitBuffers ?? true) && !Buffer.isBuffer(contents)
+  convertContent(contents: string | Buffer): string | Buffer {
+    return (this.options.emitBuffers ?? true) && !Buffer.isBuffer(contents)
       ? Buffer.from(contents)
       : contents;
   }

@@ -2,7 +2,6 @@
   "name": "favicons",
   "version": "7.0.0-beta.3",
   "description": "Favicon generator for Node.js",
-  "type": "module",
   "main": "dist/index.js",
   "files": [
     "dist/"
@@ -20,8 +19,7 @@
     "test-only": "npm run build && jest",
     "test": "npm run test-only",
     "clean": "rimraf dist/",
-    "build": "tsc",
-    "prepare": "npm run pretest && npm run build"
+    "build": "tsc"
   },
   "keywords": [
     "favicon",

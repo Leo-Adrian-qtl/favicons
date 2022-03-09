@@ -2,8 +2,9 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "outDir": "./dist",
-    "target": "es2019",
+    "target": "es5",
     "allowSyntheticDefaultImports": true
   },
   "include": ["./src/**/*"]
 }
+
